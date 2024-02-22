@@ -9,18 +9,25 @@ const names = Object.keys(nameToPic);
 
 export default function GameScreen() {
   // TODO: Declare and initialize state variables here, using "useState".
+  const [numCorrect, setNumCorrect] = useState(0);         // State for the Score
+  const [numAttempted, setNumAttempted] = useState(0);     // State for images attempted 
+  const [currMemberIMG, setCurrMemberIMG] = useState(nameToPic[0][1]);  // State for current MDB member img
+  const [currMemberName, setCurrMemberName] = useState(nameToPic[0][0]); // State for current MDB member name
+  conts [memberArray, setMemberArray] = useState([]);
+  const [roundOver, setRoundOver] = useState(false);
 
   // State for the timer is handled for you.
   const [timeLeft, setTimeLeft] = useState(5000);
 
-  // Called by the timer every 10 seconds
+  // Called by the timer every 10 milliseconds
   const countDown = () => {
     if (timeLeft > 0) {
       // Time still left, so decrement time state variable
       setTimeLeft(timeLeft - 10);
     } else {
-      // Time has expired
+      // Time has expired (reached 0)
       // TODO: update appropriate state variables
+      setRoundOver(true);
     }
   };
 
@@ -42,15 +49,23 @@ export default function GameScreen() {
       }
     }
     nameOptions = shuffle(nameOptions);
-
     // TODO: Update state here.
+    setCurrMemberIMG(correctImage);
+    setCurrMemberName(correctName);
+    setMemberArray(nameOptions);
+    setRoundOver(false);
 
     setTimeLeft(5000);
   };
 
   // Called when user taps a name option.
   // TODO: Update correct # and total # state values.
-  const selectedNameChoice = (index) => {};
+  const selectedNameChoice = (index) => {
+    if (currMemberName == names[index]) {
+      setNumCorrect(numCorrect + 1);
+    }
+    setNumAttempted(numAttempted + 1);
+  };
 
   // Call the countDown() method every 10 milliseconds.
   useEffect(() => {
@@ -64,11 +79,9 @@ export default function GameScreen() {
   // get the next round when the appropriate state variable changes.
   useEffect(
     () => {
-      getNextRound();
+      getNextRound(); // Gets next round once timer reaches 0
     },
-    [
-      /* TODO: Your State Variable Goes Here */
-    ]
+    [roundOver]
   );
 
   // Set up four name button components
@@ -83,7 +96,7 @@ export default function GameScreen() {
         onPress={() => selectedNameChoice(j)}
       >
         <Text style={styles.buttonText}>
-          {/* TODO: Use something from state here. */}
+          {memberArray[j]}
         </Text>
       </TouchableOpacity>
     );

@@ -115,7 +115,6 @@ export default function GameScreen() {
       <Text style={styles.timerText}>
         Time Remaining: {timeRemainingStr}
       </Text>
-
       <Image source = {currMemberIMG}
       style = {styles.image}></Image>
       {nameButtons}

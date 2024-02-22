@@ -11,9 +11,9 @@ export default function GameScreen() {
   // TODO: Declare and initialize state variables here, using "useState".
   const [numCorrect, setNumCorrect] = useState(0);         // State for the Score
   const [numAttempted, setNumAttempted] = useState(0);     // State for images attempted 
-  const [currMemberIMG, setCurrMemberIMG] = useState(nameToPic[0][1]);  // State for current MDB member img
-  const [currMemberName, setCurrMemberName] = useState(nameToPic[0][0]); // State for current MDB member name
-  conts [memberArray, setMemberArray] = useState([]);
+  const [currMemberName, setCurrMemberName] = useState(names[0]); // State for current MDB member name
+  const [currMemberIMG, setCurrMemberIMG] = useState(nameToPic.riatao[1]);  // State for current MDB member img
+  const [memberArray, setMemberArray] = useState([]);
   const [roundOver, setRoundOver] = useState(false);
 
   // State for the timer is handled for you.
@@ -28,6 +28,7 @@ export default function GameScreen() {
       // Time has expired (reached 0)
       // TODO: update appropriate state variables
       setRoundOver(true);
+      setNumAttempted(numAttempted + 1)
     }
   };
 
@@ -61,10 +62,11 @@ export default function GameScreen() {
   // Called when user taps a name option.
   // TODO: Update correct # and total # state values.
   const selectedNameChoice = (index) => {
-    if (currMemberName == names[index]) {
+    if (currMemberName == memberArray[index]) {
       setNumCorrect(numCorrect + 1);
     }
     setNumAttempted(numAttempted + 1);
+    setRoundOver(true);
   };
 
   // Call the countDown() method every 10 milliseconds.
@@ -107,10 +109,16 @@ export default function GameScreen() {
   // Style & return the view.
   return (
     <View>
-      {/* TODO: Build out your UI using Text and Image components. */}
-      {/* Hint: What does the nameButtons list above hold? 
-          What types of objects is this list storing?
-          Try to get a sense of what's going on in the for loop above. */}
+      <Text style={styles.scoreText}>
+        Score: {numCorrect}/{numAttempted}
+      </Text>
+      <Text style={styles.timerText}>
+        Time Remaining: {timeRemainingStr}
+      </Text>
+
+      <Image source = {currMemberIMG}
+      style = {styles.image}></Image>
+      {nameButtons}
     </View>
   );
 }
